@@ -27,12 +27,6 @@ All of this is surfaced in a Streamlit dashboard: portfolio value and sector
 exposure, price history, a volatility forecast-vs-realized chart with
 anomaly markers, and a live-tick panel.
 
-**Scope note:** this is a demo/portfolio project, not production infrastructure
-— the "live" feed is simulated (not a real market data stream), there's no
-persistence or multi-user support, and the anomaly detector is a simple
-z-score threshold rather than a tuned model. Those are the natural next steps
-if this were going further (see "Possible extensions" below).
-
 ## Why this architecture
 
 Risk numbers that can't be trusted are worse than no risk numbers at all. So
