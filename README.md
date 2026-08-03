@@ -5,6 +5,34 @@ core, a GARCH volatility model with anomaly detection, and a live dashboard —
 built the way I'd want risk infrastructure at a trading firm or bank to be
 built: pure, typed, and tested.
 
+## What it does
+
+You give it a portfolio (tickers + share counts). It pulls real historical
+prices for those tickers and answers three questions:
+
+1. **How much could this portfolio lose tomorrow?** — via Value at Risk (the
+   loss on a bad day, e.g. the worst 5%) and Expected Shortfall / CVaR (the
+   average loss *given* it is a bad day — more conservative than VaR).
+2. **Is volatility behaving normally right now?** — a GARCH(1,1) model
+   forecasts expected volatility per asset from its return history and flags
+   points where realized volatility blew past what the model expected (e.g.
+   an earnings surprise or a crash), rather than relying on a fixed threshold.
+3. **What happens as new prices arrive, live?** — a simulated price stream
+   (since a free real-time feed isn't available) triggers incremental
+   recomputation of rolling VaR through a small dependency graph, so only
+   the risk numbers that actually depend on the new price get recalculated —
+   not the whole portfolio from scratch.
+
+All of this is surfaced in a Streamlit dashboard: portfolio value and sector
+exposure, price history, a volatility forecast-vs-realized chart with
+anomaly markers, and a live-tick panel.
+
+**Scope note:** this is a demo/portfolio project, not production infrastructure
+— the "live" feed is simulated (not a real market data stream), there's no
+persistence or multi-user support, and the anomaly detector is a simple
+z-score threshold rather than a tuned model. Those are the natural next steps
+if this were going further (see "Possible extensions" below).
+
 ## Why this architecture
 
 Risk numbers that can't be trusted are worse than no risk numbers at all. So
